@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.telephony.CellInfoGsm;
+import android.telephony.CellSignalStrengthGsm;
 import android.telephony.TelephonyManager;
 
 import androidx.core.content.ContextCompat;
@@ -156,6 +158,19 @@ abstract class ConnectivityReceiver {
                 String carrier = mTelephonyManager.getNetworkOperatorName();
                 if (carrier != null) {
                     details.putString("carrier", carrier);
+                }
+
+                // Add the signal strength
+                if (ContextCompat.checkSelfPermission(getReactContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    CellInfoGsm cellInfoGsm = (CellInfoGsm) mTelephonyManager.getAllCellInfo().get(0);
+                    if (cellInfoGsm != null) {
+                        CellSignalStrengthGsm cellSignalStrengthGsm = cellInfoGsm.getCellSignalStrength();
+                        // Signal strength in dBm
+                        details.putInt("signalStrengthIndBm", cellSignalStrengthGsm.getDbm());
+                        // Signal strength in levels
+                        details.putInt("signalStrengthInLevel", cellSignalStrengthGsm.getLevel());
+                    }
                 }
                 break;
             case "wifi":
