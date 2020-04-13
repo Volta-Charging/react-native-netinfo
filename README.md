@@ -268,6 +268,7 @@ The `details` value depends on the `type` value.
 | `isConnectionExpensive` | Android, iOS, macOS, Windows, Web | `boolean`                                                          | If the network connection is considered "expensive". This could be in either energy or monetary terms.                |
 | `cellularGeneration`    | Android, iOS, Windows             | [`NetInfoCellularGeneration`](#netinfocellulargeneration)          | The generation of the cell network the user is connected to. This can give an indication of speed, but no guarantees. |
 | `carrier`               | Android, iOS                      | `string`                                                           | The network carrier name. May not be present or may be empty if none can be determined.                               |
+| `carrier`               | Android, iOS                      | `string`                                                           | The network carrier name. May not be present or may be empty if none can be determined.                               |
 
 ##### `type` is `bluetooth`, `ethernet`, `wimax`, `vpn`, or `other`
 

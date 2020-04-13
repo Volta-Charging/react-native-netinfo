@@ -12,10 +12,18 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.telephony.CellInfo;
+import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
+import android.telephony.CellInfoLte;
+import android.telephony.CellInfoWcdma;
+import android.telephony.CellSignalStrengthCdma;
 import android.telephony.CellSignalStrengthGsm;
+import android.telephony.CellSignalStrengthLte;
+import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.TelephonyManager;
 
+import android.util.Log;
 import androidx.core.content.ContextCompat;
 import androidx.core.net.ConnectivityManagerCompat;
 
@@ -36,7 +44,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 abstract class ConnectivityReceiver {
-
+    private static final String TAG = "ConnectivityReceiver";
     private final ConnectivityManager mConnectivityManager;
     private final WifiManager mWifiManager;
     private final TelephonyManager mTelephonyManager;
@@ -163,13 +171,44 @@ abstract class ConnectivityReceiver {
                 // Add the signal strength
                 if (ContextCompat.checkSelfPermission(getReactContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    CellInfoGsm cellInfoGsm = (CellInfoGsm) mTelephonyManager.getAllCellInfo().get(0);
-                    if (cellInfoGsm != null) {
-                        CellSignalStrengthGsm cellSignalStrengthGsm = cellInfoGsm.getCellSignalStrength();
-                        // Signal strength in dBm
-                        details.putInt("signalStrengthIndBm", cellSignalStrengthGsm.getDbm());
-                        // Signal strength in levels
-                        details.putInt("signalStrengthInLevel", cellSignalStrengthGsm.getLevel());
+                    try {
+                        // Get all the information of the cells of the device
+                        for (CellInfo cellInfo : mTelephonyManager.getAllCellInfo()) {
+                            // Check if the cell is registered
+                            if (cellInfo != null && cellInfo.isRegistered()) {
+                                if (cellInfo instanceof CellInfoGsm) {
+                                    CellSignalStrengthGsm cellSignalStrengthGsm = ((CellInfoGsm) cellInfo).getCellSignalStrength();
+                                    // Signal strength in dBm
+                                    details.putInt("signalStrengthIndBm", cellSignalStrengthGsm.getDbm());
+                                    // Signal strength in levels
+                                    details.putInt("signalStrengthInLevel", cellSignalStrengthGsm.getLevel());
+                                }
+                                if (cellInfo instanceof CellInfoLte) {
+                                    CellSignalStrengthLte cellSignalStrengthLte = ((CellInfoLte) cellInfo).getCellSignalStrength();
+                                    // Signal strength in dBm
+                                    details.putInt("signalStrengthIndBm", cellSignalStrengthLte.getDbm());
+                                    // Signal strength in levels
+                                    details.putInt("signalStrengthInLevel", cellSignalStrengthLte.getLevel());
+                                }
+                                if (cellInfo instanceof CellInfoCdma) {
+                                    CellSignalStrengthCdma cellSignalStrengthCdma = ((CellInfoCdma) cellInfo).getCellSignalStrength();
+                                    // Signal strength in dBm
+                                    details.putInt("signalStrengthIndBm", cellSignalStrengthCdma.getDbm());
+                                    // Signal strength in levels
+                                    details.putInt("signalStrengthInLevel", cellSignalStrengthCdma.getLevel());
+                                }
+                                if (cellInfo instanceof CellInfoWcdma) {
+                                    CellSignalStrengthWcdma cellSignalStrengthWcdma = ((CellInfoWcdma) cellInfo).getCellSignalStrength();
+                                    // Signal strength in dBm
+                                    details.putInt("signalStrengthIndBm", cellSignalStrengthWcdma.getDbm());
+                                    // Signal strength in levels
+                                    details.putInt("signalStrengthInLevel", cellSignalStrengthWcdma.getLevel());
+                                }
+                                break;
+                            }
+                        }
+                    } catch (Exception exception) {
+                        Log.e(TAG, "Unable to obtain cell signal information", exception);
                     }
                 }
                 break;
