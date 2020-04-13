@@ -145,7 +145,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-comm 5it": "lint-staged",
+      "pre-commit": "lint-staged",
       "pre-push": "yarn test"
     }
   },
