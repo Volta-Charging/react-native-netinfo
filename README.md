@@ -1,9 +1,9 @@
 
-# `@react-native-community/netinfo`
+# `@volta/netinfo`
 
 [![CircleCI Status](https://img.shields.io/circleci/project/github/react-native-community/react-native-netinfo/master.svg)](https://circleci.com/gh/react-native-community/workflows/react-native-netinfo/tree/master) ![Supports Android, iOS, macOS, and Windows](https://img.shields.io/badge/platforms-android%20|%20ios%20|%20macos%20|%20windows-lightgrey.svg) ![MIT License](https://img.shields.io/npm/l/@react-native-community/netinfo.svg) [![Lean Core Extracted](https://img.shields.io/badge/Lean%20Core-Extracted-brightgreen.svg)](https://github.com/facebook/react-native/issues/23313)
 
-React Native Network Info API for Android, iOS, macOS & Windows. It allows you to get information on:
+This is a forked library from React Native Community's [React Native Network Info API](https://github.com/react-native-community/react-native-netinfo) for Android, iOS, macOS & Windows. It allows you to get information on:
 
 * Connection type
 * Connection quality
@@ -268,6 +268,9 @@ The `details` value depends on the `type` value.
 | `isConnectionExpensive` | Android, iOS, macOS, Windows, Web | `boolean`                                                          | If the network connection is considered "expensive". This could be in either energy or monetary terms.                |
 | `cellularGeneration`    | Android, iOS, Windows             | [`NetInfoCellularGeneration`](#netinfocellulargeneration)          | The generation of the cell network the user is connected to. This can give an indication of speed, but no guarantees. |
 | `carrier`               | Android, iOS                      | `string`                                                           | The network carrier name. May not be present or may be empty if none can be determined.                               |
+| `signalStrengthIndBm`               | Android                    | `number`                                                           | The network strength in dBm. May not be present or may be empty if none can be determined.                               |
+| `signalStrengthInLevel`               | Android                   | `number`                                                           | The network stegnth in levels between 1-5. May not be present or may be empty if none can be determined.                               |
+
 
 ##### `type` is `bluetooth`, `ethernet`, `wimax`, `vpn`, or `other`
 
